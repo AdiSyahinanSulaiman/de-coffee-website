@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>De Coffee</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">De Coffee</div>
+        <div class="review-form">
+            <button id="reviewBtn" class="review-btn">Share Your Experience</button>
+            <div id="reviewModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Share Your Experience</h2>
+                    <form id="customerReview">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="review">Your Review:</label>
+                            <textarea id="review" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="suggestion">Suggest a Drink Combination:</label>
+                            <input type="text" id="suggestion" placeholder="Ex: Espresso with caramel and whipped cream">
+                        </div>
+                        <button type="submit" class="submit-btn">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="featured-section">
+                <div class="slideshow-container">
+                    <div class="slide fade">
+                        <img src="images/Arabica Beans.png" alt="Arabica Beans">
+                    </div>
+                    <div class="slide fade">
+                        <a href="https://www.gomamam.com/" target="_blank">
+                            <img src="images/Go Mamam.png" alt="Mobile App">
+                        </a>
+                    </div>
+                    <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+                    <a class="next" onclick="changeSlide(1)">&#10095;</a>
+                    <div class="dots-container">
+                        <span class="dot" onclick="currentSlide(1)"></span>
+                        <span class="dot" onclick="currentSlide(2)"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="drink-month-section">
+                <h2>Drink of the Month</h2>
+                <img src="images/DoTM.png" alt="Drink of the Month" class="drink-month-image">
+            </div>
+
+            <div class="Menu-Section">
+                <h2>Menu</h2>
+                <img src="images/Menu.png" alt="menu" class="Menu-Section-image">
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-section social-media">
+            <h3>Follow Our Socials!</h3>
+            <div class="social-icons">
+                <a href="https://instagram.com/decoffee.bn" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://tiktok.com/@decoffeebn" target="_blank">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer-section locations">
+            <h3>Our Branches</h3>
+            <p>Koprijaya, Berakas</p>
+            <p>The Mall, Gadong</p>
+            <p>Kiulap, Setia Kenangan II</p>
+            <p>KB, Jalan Pretty</p>
+        </div>
+        
+        <div class="footer-section hours">
+            <h3>Operating Hours</h3>
+            <p>7AM-10PM</p>
+            <p>10AM-9PM</p>
+            <p>7AM-9PM</p>
+            <p>7AM-10PM</p>
+            <p>Friday closed 12pm-2pm</p>
+        </div>
+    </footer>
+
+    <script>
+        // Modal functionality
+        const modal = document.getElementById("reviewModal");
+        const btn = document.getElementById("reviewBtn");
+        const span = document.getElementsByClassName("close")[0];
+        
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+        
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Form submission with WhatsApp integration
+        document.getElementById("customerReview").onsubmit = function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById("name").value;
+            const review = document.getElementById("review").value;
+            const suggestion = document.getElementById("suggestion").value;
+            
+            // Format the message for WhatsApp
+            const message = `New Review from ${name}%0A%0AReview: ${review}%0A%0ASuggestion: ${suggestion}`;
+            
+            // Open WhatsApp with the formatted message
+            window.open(`https://wa.me/673880717?text=${message}`, '_blank');
+            
+            modal.style.display = "none";
+            this.reset();
+        }
+
+        // Slideshow functionality
+        let slideIndex = 1;
+        let slideTimer;
+
+        function showSlides(n) {
+            const slides = document.getElementsByClassName("slide");
+            const dots = document.getElementsByClassName("dot");
+            
+            if (n > slides.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = slides.length}
+            
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            
+            slides[slideIndex-1].style.display = "block";
+            dots[slideIndex-1].className += " active";
+        }
+
+        function changeSlide(n) {
+            clearTimeout(slideTimer);
+            showSlides(slideIndex += n);
+            autoSlide();
+        }
+
+        function currentSlide(n) {
+            clearTimeout(slideTimer);
+            showSlides(slideIndex = n);
+            autoSlide();
+        }
+
+        function autoSlide() {
+            slideTimer = setTimeout(() => {
+                changeSlide(1);
+            }, 5000);
+        }
+
+        // Initialize slideshow
+        showSlides(slideIndex);
+        autoSlide();
+    </script>
+</body>
+</html>
